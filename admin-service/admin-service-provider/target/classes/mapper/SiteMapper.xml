@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.admin.provider.dao.SiteDAO">
+    <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.SiteDTO">
+        <id column="site_id" property="siteId" jdbcType="INTEGER"/>
+        <result column="site_name" property="siteName" jdbcType="VARCHAR"/>
+        <result column="allow_domains" property="allowDomains" jdbcType="VARCHAR"/>
+        <result column="start_urls" property="startUrls" jdbcType="VARCHAR"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        site_id, site_name, allow_domains, start_urls, gmt_created, status, code
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site
+        where site_id = #{siteId,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectByPrimaryName" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site
+        where site_name = #{siteName,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="listSite" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site
+        where status = 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_d_site
+    where site_id = #{siteId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.mdx.admin.api.pojo.dto.SiteDTO" keyProperty="siteId" useGeneratedKeys="true">
+    insert into t_d_site (site_id, site_name, allow_domains,
+      start_urls, gmt_created, status,code)
+    values (#{siteId,jdbcType=INTEGER}, #{siteName,jdbcType=VARCHAR}, #{allowDomains,jdbcType=VARCHAR},
+      #{startUrls,jdbcType=VARCHAR}, now(), 1, #{code,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.mdx.admin.api.pojo.dto.SiteDTO" keyProperty="siteId"
+            useGeneratedKeys="true">
+        insert into t_d_site
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="siteId != null">
+                site_id,
+            </if>
+            <if test="siteName != null">
+                site_name,
+            </if>
+            <if test="allowDomains != null">
+                allow_domains,
+            </if>
+            <if test="startUrls != null">
+                start_urls,
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="siteId != null">
+                #{siteId,jdbcType=INTEGER},
+            </if>
+            <if test="siteName != null">
+                #{siteName,jdbcType=VARCHAR},
+            </if>
+            <if test="allowDomains != null">
+                #{allowDomains,jdbcType=VARCHAR},
+            </if>
+            <if test="startUrls != null">
+                #{startUrls,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreated != null">
+                #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                1,
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+</mapper>

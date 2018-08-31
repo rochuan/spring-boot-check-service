@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.admin.provider.dao.ConfigDAO">
+    <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.ConfigDTO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="config_key" property="configKey" jdbcType="VARCHAR"/>
+        <result column="config_category_id" property="configCategoryId" jdbcType="INTEGER"/>
+        <result column="config_value" property="configValue" jdbcType="VARCHAR"/>
+        <result column="comment" property="comment" jdbcType="CHAR"/>
+        <result column="is_active" property="isActive" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="SMALLINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_updated" property="gmtUpdated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, config_key, config_category_id, config_value, comment, is_active, status, gmt_created, 
+    gmt_updated
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_config
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectSmsConfigList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_config
+        where config_key = 'sms_key' or config_key = 'sms_secret' or config_key = 'sms_sign' or config_key =
+        'sms_template_id'
+    </select>
+
+    <select id="selectSmsEmailConfigList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_config
+        where config_key = 'sms_key'
+        or config_key = 'sms_secret'
+        or config_key = 'sms_sign'
+        or config_key = 'sms_template_id'
+        or config_key = 'email_server'
+        or config_key = 'email_port'
+        or config_key = 'email_user'
+        or config_key = 'email_password'
+    </select>
+
+    <select id="selectConfigByConfigKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_b_config
+        where config_key = #{configKey,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_b_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.mdx.admin.api.pojo.dto.ConfigDTO">
+    insert into t_b_config (id, config_key, config_category_id, 
+      config_value, comment, is_active, 
+      status, gmt_created, gmt_updated
+      )
+    values (#{id,jdbcType=INTEGER}, #{configKey,jdbcType=VARCHAR}, #{configCategoryId,jdbcType=INTEGER}, 
+      #{configValue,jdbcType=VARCHAR}, #{comment,jdbcType=CHAR}, #{isActive,jdbcType=TINYINT}, 
+      #{status,jdbcType=SMALLINT}, #{gmtCreated,jdbcType=TIMESTAMP}, #{gmtUpdated,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.mdx.admin.api.pojo.dto.ConfigDTO">
+        insert into t_b_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="configKey != null">
+                config_key,
+            </if>
+            <if test="configCategoryId != null">
+                config_category_id,
+            </if>
+            <if test="configValue != null">
+                config_value,
+            </if>
+            <if test="comment != null">
+                comment,
+            </if>
+            <if test="isActive != null">
+                is_active,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created,
+            </if>
+            <if test="gmtUpdated != null">
+                gmt_updated,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="configKey != null">
+                #{configKey,jdbcType=VARCHAR},
+            </if>
+            <if test="configCategoryId != null">
+                #{configCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="configValue != null">
+                #{configValue,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                #{comment,jdbcType=CHAR},
+            </if>
+            <if test="isActive != null">
+                #{isActive,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="gmtCreated != null">
+                #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtUpdated != null">
+                #{gmtUpdated,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.mdx.admin.api.pojo.dto.ConfigDTO">
+        update t_b_config
+        <set>
+            <if test="configKey != null">
+                config_key = #{configKey,jdbcType=VARCHAR},
+            </if>
+            <if test="configCategoryId != null">
+                config_category_id = #{configCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="configValue != null">
+                config_value = #{configValue,jdbcType=VARCHAR},
+            </if>
+            <if test="comment != null">
+                comment = #{comment,jdbcType=CHAR},
+            </if>
+            <if test="isActive != null">
+                is_active = #{isActive,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtUpdated != null">
+                gmt_updated = #{gmtUpdated,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updateKVConfigSelective">
+        update t_b_config
+        <set>
+            <if test="configValue != null">
+                config_value = #{configValue,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where config_key = #{configKey,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.mdx.admin.api.pojo.dto.ConfigDTO">
+    update t_b_config
+    set config_key = #{configKey,jdbcType=VARCHAR},
+      config_category_id = #{configCategoryId,jdbcType=INTEGER},
+      config_value = #{configValue,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=CHAR},
+      is_active = #{isActive,jdbcType=TINYINT},
+      status = #{status,jdbcType=SMALLINT},
+      gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+      gmt_updated = #{gmtUpdated,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

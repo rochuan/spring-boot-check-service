@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.admin.provider.dao.TaskRecordDAO">
+    <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.TaskRecordDTO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="start_at" property="startAt" jdbcType="TIMESTAMP"/>
+        <result column="site_id" property="siteId" jdbcType="INTEGER"/>
+        <result column="end_at" property="endAt" jdbcType="TIMESTAMP"/>
+        <result column="checks" property="checks" jdbcType="INTEGER"/>
+        <result column="success" property="success" jdbcType="INTEGER"/>
+        <result column="failed" property="failed" jdbcType="INTEGER"/>
+        <result column="review" property="review" jdbcType="INTEGER"/>
+        <result column="task_end" property="taskEnd" jdbcType="INTEGER"/>
+        <result column="report_flag" property="reportFlag" jdbcType="INTEGER"/>
+        <result column="report_id" property="reportId" jdbcType="VARCHAR"/>
+        <result column="report_type" property="reportType" jdbcType="INTEGER"/>
+        <result column="page_size" property="pageSize" jdbcType="INTEGER"/>
+        <result column="page_index" property="pageIndex" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, start_at, site_id, end_at, checks, success, failed, review, task_end, report_flag, 
+    report_id, report_type, page_size, page_index
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_task_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+    <select id="selectBySiteId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_task_record
+        where site_id = #{siteId,jdbcType=INTEGER} and report_type = #{reportType,jdbcType=INTEGER} order by id desc limit 1
+    </select>
+
+    <select id="selectAllPage" resultMap="BaseResultMap">
+        select max(id) as id, site_id,MIN(start_at) as start_at ,MAX(end_at) as end_at, sum(checks) as checks, sum(success) as success, sum(failed) as failed , sum(review) as review ,
+ task_end,report_flag,report_id,report_type,page_size,page_index
+from t_d_task_record   where site_id = #{siteId,jdbcType=INTEGER}  GROUP BY `report_id` order by id desc limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_d_task_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+</mapper>

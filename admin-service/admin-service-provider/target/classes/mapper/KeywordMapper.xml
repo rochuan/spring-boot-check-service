@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.admin.provider.dao.KeywordDAO" >
+  <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.KeywordDTO" >
+    <id column="keyword_id" property="keywordId" jdbcType="INTEGER" />
+    <result column="keyword_text" property="keywordText" jdbcType="VARCHAR" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    keyword_id, keyword_text, gmt_created
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer"  >
+    select 
+    <include refid="Base_Column_List" />
+    from t_d_keyword
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByPrimaryKeyword" resultMap="BaseResultMap" parameterType="java.lang.String"  >
+    select
+    <include refid="Base_Column_List" />
+    from t_d_keyword
+    where keyword_text = #{keyword}
+  </select>
+
+
+  <select id="listKeyword" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from t_d_keyword
+    where status = 0
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_d_keyword
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.mdx.admin.api.pojo.dto.KeywordDTO" useGeneratedKeys="true" keyProperty="keywordId" >
+    insert into t_d_keyword (keyword_id, keyword_text, gmt_created
+      )
+    values (#{keywordId,jdbcType=INTEGER}, #{keywordText,jdbcType=VARCHAR}, now()
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.mdx.admin.api.pojo.dto.KeywordDTO" >
+    insert into t_d_keyword
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="keywordId != null" >
+        keyword_id,
+      </if>
+      <if test="keywordText != null" >
+        keyword_text,
+      </if>
+      <if test="gmtCreated != null" >
+        gmt_created,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="keywordId != null" >
+        #{keywordId,jdbcType=INTEGER},
+      </if>
+      <if test="keywordText != null" >
+        #{keywordText,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreated != null" >
+        #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.mdx.admin.api.pojo.dto.KeywordDTO" >
+    update t_d_keyword
+    <set >
+      <if test="keywordText != null" >
+        keyword_text = #{keywordText,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreated != null" >
+        gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.mdx.admin.api.pojo.dto.KeywordDTO" >
+    update t_d_keyword
+    set keyword_text = #{keywordText,jdbcType=VARCHAR},
+      gmt_created = #{gmtCreated,jdbcType=TIMESTAMP}
+    where keyword_id = #{keywordId,jdbcType=INTEGER}
+  </update>
+</mapper>

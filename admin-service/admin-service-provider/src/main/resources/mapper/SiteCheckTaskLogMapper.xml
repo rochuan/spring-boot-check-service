@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.admin.provider.dao.SiteCheckTaskLogDAO">
+    <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.SiteCheckTaskLogDTO">
+        <id column="log_id" property="logId" jdbcType="INTEGER"/>
+        <result column="check_task_id" property="checkTaskId" jdbcType="INTEGER"/>
+        <result column="url_id" property="urlId" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="check_result" property="checkResult" jdbcType="INTEGER"/>
+        <result column="check_result_desc" property="checkResultDesc" jdbcType="VARCHAR"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    log_id, check_task_id, url_id, url, check_result, check_result_desc, gmt_created
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site_checktask_log
+        where log_id = #{logId,jdbcType=INTEGER}
+    </select>
+
+    <select id="listRiskLog" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select log.* from t_d_site_checktask_log as log  inner join t_d_site_url as url on log.`url_id` = url.`url_id` where url.site_id = #{siteId,jdbcType=INTEGER} and (log.check_result = 1 or log.check_result = 2 )
+    </select>
+
+    <select id="getRiskReportList" resultMap="BaseResultMap" >
+        select log.* from t_d_site_checktask_log as log where log.check_task_id in (select id from `t_d_task_record` where report_id = #{reportId,jdbcType=VARCHAR} and site_id = #{siteId,jdbcType=INTEGER}) and (log.check_result = 1 or log.check_result = 2)
+    </select>
+
+    <select id="getCheckReportList" resultMap="BaseResultMap" >
+        select log.* from t_d_site_checktask_log as log where log.check_task_id in (select id from `t_d_task_record` where report_id = #{reportId,jdbcType=VARCHAR} and site_id = #{siteId,jdbcType=INTEGER}) and log.check_result = 0
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_d_site_checktask_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.mdx.admin.api.pojo.dto.SiteCheckTaskLogDTO">
+    insert into t_d_site_checktask_log (log_id, check_task_id, url_id, 
+      url, check_result, check_result_desc, 
+      gmt_created)
+    values (#{logId,jdbcType=INTEGER}, #{checkTaskId,jdbcType=INTEGER}, #{urlId,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR}, #{checkResult,jdbcType=INTEGER}, #{checkResultDesc,jdbcType=VARCHAR}, 
+      #{gmtCreated,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.mdx.admin.api.pojo.dto.SiteCheckTaskLogDTO">
+        insert into t_d_site_checktask_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                log_id,
+            </if>
+            <if test="checkTaskId != null">
+                check_task_id,
+            </if>
+            <if test="urlId != null">
+                url_id,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="checkResult != null">
+                check_result,
+            </if>
+            <if test="checkResultDesc != null">
+                check_result_desc,
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="logId != null">
+                #{logId,jdbcType=INTEGER},
+            </if>
+            <if test="checkTaskId != null">
+                #{checkTaskId,jdbcType=INTEGER},
+            </if>
+            <if test="urlId != null">
+                #{urlId,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="checkResult != null">
+                #{checkResult,jdbcType=INTEGER},
+            </if>
+            <if test="checkResultDesc != null">
+                #{checkResultDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreated != null">
+                #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.mdx.admin.api.pojo.dto.SiteCheckTaskLogDTO">
+        update t_d_site_checktask_log
+        <set>
+            <if test="checkTaskId != null">
+                check_task_id = #{checkTaskId,jdbcType=INTEGER},
+            </if>
+            <if test="urlId != null">
+                url_id = #{urlId,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="checkResult != null">
+                check_result = #{checkResult,jdbcType=INTEGER},
+            </if>
+            <if test="checkResultDesc != null">
+                check_result_desc = #{checkResultDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where log_id = #{logId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.mdx.admin.api.pojo.dto.SiteCheckTaskLogDTO">
+    update t_d_site_checktask_log
+    set check_task_id = #{checkTaskId,jdbcType=INTEGER},
+      url_id = #{urlId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      check_result = #{checkResult,jdbcType=INTEGER},
+      check_result_desc = #{checkResultDesc,jdbcType=VARCHAR},
+      gmt_created = #{gmtCreated,jdbcType=TIMESTAMP}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>
