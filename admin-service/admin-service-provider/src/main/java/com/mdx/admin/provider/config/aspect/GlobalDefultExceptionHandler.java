@@ -15,7 +15,6 @@ import java.net.ConnectException;
 
 
 @ControllerAdvice
-@Order(1)
 public class GlobalDefultExceptionHandler {
 
     @ExceptionHandler(Exception.class)

@@ -16,6 +16,7 @@
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/pojo/dto/MonitorReportNoticeConfigDTO.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/pojo/dto/EmailConfigDTO.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/req/SaveEmailConfigReq.java
+/code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/req/ChecktaskLogDeleteReq.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/AdminApi.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/req/SaveMonitorReportNoticeConfigReq.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-api/src/main/java/com/mdx/admin/api/utils/EncryptUtil.java

@@ -1,12 +1,10 @@
 package com.mdx.admin.provider.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.mdx.admin.api.ConfigApi;
-import com.mdx.admin.api.SiteApi;
 import com.mdx.admin.api.pojo.dto.*;
 import com.mdx.admin.api.req.*;
-import com.mdx.admin.provider.authorization.annotation.Authorization;
-import com.mdx.admin.provider.service.AdminService;
+import com.mdx.admin.provider.authorization.annotation.Auth;
+import com.mdx.admin.provider.service.IAdminService;
 import com.mdx.common.ObjectResp;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,17 +27,17 @@ import javax.validation.Valid;
 public class ConfigController implements ConfigApi {
 
     @Autowired
-    private AdminService adminService;
+    private IAdminService adminService;
 
     @Override
-    @Authorization
+    @Auth
     public ObjectResp<SmsConfigDTO> getSmsConfig() {
         ObjectResp<SmsConfigDTO> objectResp = adminService.getSmsConfig();
         return objectResp;
     }
 
     @Override
-    @Authorization
+    @Auth
     public ObjectResp<EmailConfigDTO> getEmailConfig() {
         ObjectResp<EmailConfigDTO> objectResp = adminService.getEmailConfig();
         return objectResp;

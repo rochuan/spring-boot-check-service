@@ -2,10 +2,9 @@ package com.mdx.admin.provider.authorization.interceptor;
 
 import com.alibaba.fastjson.JSON;
 
-import com.mdx.admin.provider.authorization.annotation.Authorization;
+import com.mdx.admin.provider.authorization.annotation.Auth;
 import com.mdx.admin.provider.authorization.manager.AccessTokenManager;
 import com.mdx.admin.api.error.ErrorCode;
-import com.mdx.admin.api.pojo.dto.AccessTokenDTO;
 import com.mdx.common.ObjectResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,7 +31,7 @@ public class AuthorizationInterceptor  extends HandlerInterceptorAdapter {
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         //从header中得到token
-        String accessToken = request.getHeader("Authorization");
+        String accessToken = request.getHeader("Auth");
         //验证token
         String accessTokenValue = accessTokenManager.getAccessToken(accessToken);
         if (accessTokenValue != null) {
@@ -42,7 +41,7 @@ public class AuthorizationInterceptor  extends HandlerInterceptorAdapter {
             return true;
         }
         //如果验证token失败，并且方法注明了Authorization，返回401错误
-        if (method.getAnnotation(Authorization.class) != null) {
+        if (method.getAnnotation(Auth.class) != null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setCharacterEncoding("utf-8");
             response.setContentType("application/json; charset=utf-8");

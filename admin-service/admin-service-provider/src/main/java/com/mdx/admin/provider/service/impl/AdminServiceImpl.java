@@ -2,34 +2,25 @@ package com.mdx.admin.provider.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-
-import com.mdx.admin.api.ConfigApi;
+import com.mdx.admin.api.error.ErrorCode;
 import com.mdx.admin.api.pojo.dto.*;
 import com.mdx.admin.api.req.*;
 import com.mdx.admin.api.utils.EncryptUtil;
 import com.mdx.admin.provider.dao.*;
-import com.mdx.admin.provider.service.AdminService;
-import com.mdx.admin.api.error.ErrorCode;
+import com.mdx.admin.provider.service.IAdminService;
 import com.mdx.common.IdWorker;
 import com.mdx.common.ObjectResp;
-import com.sun.tools.javac.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 
-import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
-public class AdminServiceImpl implements AdminService {
-
+public class AdminServiceImpl implements IAdminService {
 
     @Autowired
     private KeywordDAO keywordDAO;
@@ -47,7 +38,6 @@ public class AdminServiceImpl implements AdminService {
     private TaskRecordDAO taskRecordDAO;
     @Autowired
     private AdminDAO adminDAO;
-
 
     @Override
     public ObjectResp<AccessTokenDTO> login(AdminLoginReq req) {
@@ -83,16 +73,14 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ObjectResp<AdminDTO> getAdmin(Long adminId) {
-
-        AdminDTO adminDTO = adminDAO.getAdmin(adminId);
+    public ObjectResp<AdminDTO> getAdmin(Long userId) {
+        AdminDTO adminDTO = adminDAO.getAdmin(userId);
         return new ObjectResp<AdminDTO>(adminDTO);
     }
 
     @Override
-    public ObjectResp logout(Long adminId) {
-
-        String key = "silk_check_access_token_" + Long.toString(adminId);
+    public ObjectResp logout(Long userId) {
+        String key = "silk_check_access_token_" + Long.toString(userId);
 
         Jedis jedis = new Jedis("localhost", 6379);
         jedis.select(2);
@@ -157,10 +145,8 @@ public class AdminServiceImpl implements AdminService {
         return new ObjectResp<Integer>(flag);
     }
 
-
     @Override
     public ObjectResp<KeywordDTO> createKeyword(KeywordCreateReq req) {
-
         KeywordDTO keywordDTO = keywordDAO.selectByPrimaryKeyword(req.getKeywordText());
         if (null == keywordDTO) {
             keywordDTO = new KeywordDTO();
@@ -169,7 +155,6 @@ public class AdminServiceImpl implements AdminService {
             return new ObjectResp<KeywordDTO>(keywordDTO);
         }
         return new ObjectResp<>(ErrorCode.DATA_INFO_EXIST);
-
     }
 
     @Override
@@ -231,7 +216,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ObjectResp<EmailConfigDTO> getEmailConfig() {
-
         EmailConfigDTO emailConfigDTO = new EmailConfigDTO();
 
         List<ConfigDTO> configDTOS = configDAO.selectSmsEmailConfigList();
@@ -268,7 +252,6 @@ public class AdminServiceImpl implements AdminService {
         configDAO.updateKVConfigSelective("sms_template_id", req.getSmsConfigTemplateId());
 
         return new ObjectResp<Integer>(flag);
-
     }
 
     @Override
@@ -284,7 +267,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ObjectResp<RiskNoticeConfigDTO> getRiskNotice() {
-
         RiskNoticeConfigDTO riskNoticeConfigDTO = new RiskNoticeConfigDTO();
         List<String> mobiles = getRiskNoticeMobiles();
         List<String> emails = getRiskNoticeEmails();
@@ -293,7 +275,6 @@ public class AdminServiceImpl implements AdminService {
         riskNoticeConfigDTO.setMobiles(mobiles);
 
         return new ObjectResp<RiskNoticeConfigDTO>(riskNoticeConfigDTO);
-
     }
 
     @Override
@@ -338,7 +319,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ObjectResp<CustomCheckDTO> createCustomCheck(CustomCheckCreateReq req) {
-
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
         IdWorker idWorker = new IdWorker(0, 0);
@@ -385,25 +365,12 @@ public class AdminServiceImpl implements AdminService {
             if (null != siteDTO) {
                 code = siteDTO.getCode();
             }
-            execCustomBashCommand(reportId, code , req.getUrlType());
+            execCustomBashCommand(reportId, code, req.getUrlType());
         } catch (Exception e) {
             System.out.printf("e:" + e.getStackTrace());
         }
 
         return new ObjectResp<CustomCheckDTO>(customCheckDTO);
-    }
-
-    private void execCustomBashCommand(String reportId, String code , int reportType) throws Exception {
-        String bashCommand = "sh /var/www/websites/aliyun/aliyun/custom_check_cron.sh " + code + " " + reportId + " " + reportType;
-        System.out.println(bashCommand);
-        Runtime runtime = Runtime.getRuntime();
-        Process pro = runtime.exec(bashCommand);
-        int status = pro.waitFor();
-        if (status != 0) {
-            System.out.println(reportId + "Failed to call shell's command ");
-        } else {
-            System.out.println(reportId + "Success to call shell's command ");
-        }
     }
 
     @Override
@@ -432,7 +399,6 @@ public class AdminServiceImpl implements AdminService {
         return new ObjectResp<DashboardDTO>(dashboardDTO);
     }
 
-
     @Override
     public ObjectResp<CheckReportDTO> getReport(int siteId, String reportId, int reportType) {
         CheckReportDTO checkReportDTO = new CheckReportDTO();
@@ -459,25 +425,6 @@ public class AdminServiceImpl implements AdminService {
         checkReportDTO.setRiskReportListDTO(getRiskReportList(siteId, reportId, reportType, 1, 20, true));
         checkReportDTO.setCheckReportListDTO(getCheckReportList(siteId, reportId, reportType, 1, 20, true));
         return new ObjectResp<CheckReportDTO>(checkReportDTO);
-    }
-
-
-    public PageInfo<SiteCheckTaskLogDTO> getRiskReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize, Boolean falg) {
-        //根据t_d_task_record表中reportID获取 ID
-        PageHelper.startPage(pageNumber, pageSize);
-        List<SiteCheckTaskLogDTO> siteCheckTaskLogDTOS = siteCheckTaskLogDAO.getRiskReportList(siteId, reportId, pageNumber, pageSize);
-        //根据ID查询有风险的页面
-        PageInfo<SiteCheckTaskLogDTO> pageInfo = new PageInfo<SiteCheckTaskLogDTO>(siteCheckTaskLogDTOS);
-        return pageInfo;
-    }
-
-    public PageInfo<SiteCheckTaskLogDTO> getCheckReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize, Boolean falg) {
-        //根据t_d_task_record表中reportID获取 ID
-        PageHelper.startPage(pageNumber, pageSize);
-        List<SiteCheckTaskLogDTO> siteCheckTaskLogDTOS = siteCheckTaskLogDAO.getCheckReportList(siteId, reportId, pageNumber, pageSize);
-        //根据ID查询有风险的页面
-        PageInfo<SiteCheckTaskLogDTO> pageInfo = new PageInfo<SiteCheckTaskLogDTO>(siteCheckTaskLogDTOS);
-        return pageInfo;
     }
 
     @Override
@@ -514,52 +461,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public ObjectResp<Integer> sendReportEmail(ReportEmailCreateReq req) {
-
-        JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        ObjectResp<EmailConfigDTO> emailConfigDTOObjectResp = getEmailConfig();
-        if (null == emailConfigDTOObjectResp.getData()) {
-            return new ObjectResp<Integer>(ErrorCode.DATA_INFO_NOT_EXIST);
+    public ObjectResp<Integer> deleteSiteCheckTaskLogUrl(ChecktaskLogDeleteReq req) {
+        Integer flag = siteCheckTaskLogDAO.deleteByPrimaryKey(req.getLogId());
+        if (flag <= 0) {
+            return new ObjectResp<>(ErrorCode.DATA_INFO_DELETE_ERROR);
         }
-        EmailConfigDTO emailConfigDTO = emailConfigDTOObjectResp.getData();
-        javaMailSender.setHost(emailConfigDTO.getEmailServer());
-        javaMailSender.setPort(Integer.getInteger(emailConfigDTO.getEmailPort()));
-        javaMailSender.setUsername(emailConfigDTO.getEmailUser());
-        javaMailSender.setPassword(emailConfigDTO.getEmailPassword());
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(emailConfigDTO.getEmailServer());
-        message.setTo("1990230068@qq.com");
-        message.setSubject("主题：简单邮件");
-        message.setText("测试邮件内容");
-
-        javaMailSender.send(message);
-
-        return new ObjectResp<Integer>(ErrorCode.SUCCESS);
-
+        return new ObjectResp<Integer>(flag);
     }
 
-    private TaskRecordDTO getHomepageCheck(int siteId) {
-        Integer reportType = 0;
-        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
-        return taskRecordDTO;
-    }
-
-    private TaskRecordDTO getImpotantCheck(int siteId) {
-        Integer reportType = 1;
-        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
-        return taskRecordDTO;
-    }
-
-    private TaskRecordDTO getAllPageCheck(int siteId) {
-        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectAllPage(siteId);
-        return taskRecordDTO;
-    }
-
-    private TaskRecordDTO getCustomDTOCheck(int siteId) {
-        Integer reportType = 4;
-        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
-        return taskRecordDTO;
+    @Override
+    public ObjectResp<Integer> sendReportEmail(ReportEmailCreateReq req) {
+        return null;
     }
 
     @Override
@@ -587,7 +499,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public ObjectResp<PageInfo<SiteUrlDTO>> listSiteUrlImportant(int siteId, int pageNumber, int pageSize) {
-
         PageHelper.startPage(pageNumber, pageSize);
         List<SiteUrlDTO> siteUrlDTOS = siteUrlDAO.listSiteUrlImportant(siteId, pageNumber, pageSize);
         if (null == siteUrlDTOS) {
@@ -604,6 +515,42 @@ public class AdminServiceImpl implements AdminService {
             return new ObjectResp<>(ErrorCode.DATA_INFO_DELETE_ERROR);
         }
         return new ObjectResp<Integer>(flag);
+    }
+
+    private void execCustomBashCommand(String reportId, String code, int reportType) throws Exception {
+        String bashCommand = "sh /var/www/websites/aliyun/aliyun/custom_check_cron.sh " + code + " " + reportId + " " + reportType;
+        System.out.println(bashCommand);
+        Runtime runtime = Runtime.getRuntime();
+        Process pro = runtime.exec(bashCommand);
+        int status = pro.waitFor();
+        if (status != 0) {
+            System.out.println(reportId + "Failed to call shell's command ");
+        } else {
+            System.out.println(reportId + "Success to call shell's command ");
+        }
+    }
+    private TaskRecordDTO getHomepageCheck(int siteId) {
+        Integer reportType = 0;
+        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
+        return taskRecordDTO;
+    }
+
+    private TaskRecordDTO getImpotantCheck(int siteId) {
+        Integer reportType = 1;
+        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
+        return taskRecordDTO;
+    }
+
+    private TaskRecordDTO getAllPageCheck(int siteId) {
+        Integer reportType = 255;
+        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
+        return taskRecordDTO;
+    }
+
+    private TaskRecordDTO getCustomDTOCheck(int siteId) {
+        Integer reportType = 4;
+        TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);
+        return taskRecordDTO;
     }
 
     /**
@@ -658,5 +605,23 @@ public class AdminServiceImpl implements AdminService {
             emails.add(email);
         }
         return emails;
+    }
+
+    public PageInfo<SiteCheckTaskLogDTO> getRiskReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize, Boolean falg) {
+        //根据t_d_task_record表中reportID获取 ID
+        PageHelper.startPage(pageNumber, pageSize);
+        List<SiteCheckTaskLogDTO> siteCheckTaskLogDTOS = siteCheckTaskLogDAO.getRiskReportList(siteId, reportId, pageNumber, pageSize);
+        //根据ID查询有风险的页面
+        PageInfo<SiteCheckTaskLogDTO> pageInfo = new PageInfo<SiteCheckTaskLogDTO>(siteCheckTaskLogDTOS);
+        return pageInfo;
+    }
+
+    public PageInfo<SiteCheckTaskLogDTO> getCheckReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize, Boolean falg) {
+        //根据t_d_task_record表中reportID获取 ID
+        PageHelper.startPage(pageNumber, pageSize);
+        List<SiteCheckTaskLogDTO> siteCheckTaskLogDTOS = siteCheckTaskLogDAO.getCheckReportList(siteId, reportId, pageNumber, pageSize);
+        //根据ID查询有风险的页面
+        PageInfo<SiteCheckTaskLogDTO> pageInfo = new PageInfo<SiteCheckTaskLogDTO>(siteCheckTaskLogDTOS);
+        return pageInfo;
     }
 }

@@ -34,7 +34,7 @@ public interface AdminApi {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
-    public ObjectResp<AdminDTO> getAdmin(HttpServletRequest httpServletRequest);
+    public ObjectResp<AdminDTO> getAdmin();
 
 
     @ApiOperation(value = "管理员用户退出(10003)")
@@ -42,7 +42,7 @@ public interface AdminApi {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
     })
-    public ObjectResp<AccessTokenDTO> logout(HttpServletRequest httpServletRequest);
+    public ObjectResp<AccessTokenDTO> logout();
 
     @ApiOperation(value = "管理员用户获取(10004)")
     @RequestMapping(method = RequestMethod.GET, value = "/list")

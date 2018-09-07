@@ -2,8 +2,10 @@ package com.mdx.admin.api;
 
 import com.github.pagehelper.PageInfo;
 import com.mdx.admin.api.pojo.dto.*;
+import com.mdx.admin.api.req.ChecktaskLogDeleteReq;
 import com.mdx.admin.api.req.CustomCheckCreateReq;
 import com.mdx.admin.api.req.ReportEmailCreateReq;
+import com.mdx.admin.api.req.SiteUrlDeleteReq;
 import com.mdx.common.ObjectResp;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -106,6 +108,12 @@ public interface CheckApi {
     })
     public ObjectResp<CountCheckDTO> getCheckCount(@RequestParam(value = "siteId" , required = true) int siteId );
 
+    @ApiOperation(value = "风险url删除(10608)")
+    @RequestMapping(method = RequestMethod.POST, value = "/riskUrl/delete")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header")
+    })
+    public ObjectResp<Integer> deleteSiteCheckTaskLogUrl(@Valid @RequestBody ChecktaskLogDeleteReq req);
 
 
 }

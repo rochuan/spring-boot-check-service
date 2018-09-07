@@ -28,6 +28,7 @@ com/mdx/admin/api/pojo/dto/AdminDTO.class
 com/mdx/admin/api/req/SaveSmsConfigReq.class
 com/mdx/admin/api/req/AdminLoginReq.class
 com/mdx/admin/api/utils/EncryptUtil.class
+com/mdx/admin/api/req/ChecktaskLogDeleteReq.class
 com/mdx/admin/api/SiteUrlApi.class
 com/mdx/admin/api/req/ReportEmailCreateReq.class
 com/mdx/admin/api/req/KeywordDeleteReq.class

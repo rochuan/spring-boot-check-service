@@ -3,10 +3,10 @@ package com.mdx.admin.provider.controller;
 import com.github.pagehelper.PageInfo;
 import com.mdx.admin.api.CheckApi;
 import com.mdx.admin.api.pojo.dto.*;
+import com.mdx.admin.api.req.ChecktaskLogDeleteReq;
 import com.mdx.admin.api.req.CustomCheckCreateReq;
 import com.mdx.admin.api.req.ReportEmailCreateReq;
-import com.mdx.admin.provider.authorization.annotation.Authorization;
-import com.mdx.admin.provider.service.AdminService;
+import com.mdx.admin.provider.service.IAdminService;
 import com.mdx.common.ObjectResp;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ import javax.validation.Valid;
 public class CheckController implements CheckApi {
 
     @Autowired
-    private AdminService adminService;
+    private IAdminService adminService;
 
 
     @Override
@@ -72,6 +72,11 @@ public class CheckController implements CheckApi {
     @Override
     public ObjectResp<CountCheckDTO> getCheckCount(int siteId) {
         return adminService.getCheckCount(siteId);
+    }
+
+    @Override
+    public ObjectResp<Integer> deleteSiteCheckTaskLogUrl(@Valid @RequestBody ChecktaskLogDeleteReq req) {
+        return null;
     }
 
 

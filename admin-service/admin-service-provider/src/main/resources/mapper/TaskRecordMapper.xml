@@ -33,7 +33,7 @@
         select
         <include refid="Base_Column_List"/>
         from t_d_task_record
-        where site_id = #{siteId,jdbcType=INTEGER} and report_type = #{reportType,jdbcType=INTEGER} order by id desc limit 1
+        where site_id = #{siteId,jdbcType=INTEGER} and task_end = 1 and  report_type = #{reportType,jdbcType=INTEGER} order by id desc limit 1
     </select>
 
     <select id="selectAllPage" resultMap="BaseResultMap">
