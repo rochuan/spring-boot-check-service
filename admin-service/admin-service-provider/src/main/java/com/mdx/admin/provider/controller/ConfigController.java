@@ -24,20 +24,19 @@ import javax.validation.Valid;
  * @email rochuan@163.com
  * @Date 2018-08-24
  */
+@Auth
 public class ConfigController implements ConfigApi {
 
     @Autowired
     private IAdminService adminService;
 
     @Override
-    @Auth
     public ObjectResp<SmsConfigDTO> getSmsConfig() {
         ObjectResp<SmsConfigDTO> objectResp = adminService.getSmsConfig();
         return objectResp;
     }
 
     @Override
-    @Auth
     public ObjectResp<EmailConfigDTO> getEmailConfig() {
         ObjectResp<EmailConfigDTO> objectResp = adminService.getEmailConfig();
         return objectResp;

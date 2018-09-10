@@ -26,6 +26,7 @@ import javax.validation.Valid;
  * @email rochuan@163.com
  * @Date 2018-08-13
  */
+@Auth
 public class SiteUrlController implements SiteUrlApi {
 
     @Autowired
@@ -33,20 +34,17 @@ public class SiteUrlController implements SiteUrlApi {
 
 
     @Override
-    @Auth
     public ObjectResp<SiteUrlDTO> createSiteUrlImportant(@Valid @RequestBody SiteUrlImportantCreateReq req) {
         return adminService.createSiteUrlImportant(req);
     }
 
     @Override
-    @Auth
     public ObjectResp<PageInfo<SiteUrlDTO>> listSiteUrlImportant(int siteId, int pageNumber, int pageSize) {
         return adminService.listSiteUrlImportant(siteId, pageNumber, pageSize);
     }
 
 
     @Override
-    @Auth
     public ObjectResp<Integer> deleteSiteUrlImportant(@Valid @RequestBody SiteUrlDeleteReq req) {
         return adminService.deleteSiteUrlImportant(req);
     }

@@ -75,12 +75,14 @@ public class AdminController implements AdminApi {
     }
 
     @Override
+    @Auth
     public ObjectResp<PageInfo<AdminDTO>> listAdmin(int pageNumber, int pageSize) {
         ObjectResp<PageInfo<AdminDTO>> listAdminObjectResp = adminService.listAdmin(pageNumber, pageSize);
         return listAdminObjectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<AccessTokenDTO> createAdmin(@Valid AdminCreateReq req) {
         return null;
     }

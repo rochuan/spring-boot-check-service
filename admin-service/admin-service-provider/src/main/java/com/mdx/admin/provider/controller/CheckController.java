@@ -6,6 +6,7 @@ import com.mdx.admin.api.pojo.dto.*;
 import com.mdx.admin.api.req.ChecktaskLogDeleteReq;
 import com.mdx.admin.api.req.CustomCheckCreateReq;
 import com.mdx.admin.api.req.ReportEmailCreateReq;
+import com.mdx.admin.provider.authorization.annotation.Auth;
 import com.mdx.admin.provider.service.IAdminService;
 import com.mdx.common.ObjectResp;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ import javax.validation.Valid;
  * @email rochuan@163.com
  * @Date 2018-08-24
  */
+@Auth
 public class CheckController implements CheckApi {
 
     @Autowired
@@ -33,6 +35,7 @@ public class CheckController implements CheckApi {
 
 
     @Override
+
     public ObjectResp<DashboardDTO> getDashboard(int siteId , int pageNumber, int pageSize) {
         return adminService.getDashboard(siteId , pageNumber , pageSize);
     }
@@ -65,6 +68,7 @@ public class CheckController implements CheckApi {
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> sendReportEmail(@Valid @RequestBody ReportEmailCreateReq req) {
         return adminService.sendReportEmail(req);
     }

@@ -27,6 +27,7 @@ import java.util.List;
  * @email rochuan@163.com
  * @Date 2018-08-13
  */
+@Auth
 public class SiteController implements SiteApi {
 
     @Autowired
@@ -34,14 +35,12 @@ public class SiteController implements SiteApi {
 
 
     @Override
-    @Auth
     public ObjectResp<SiteDTO> getSite(Integer siteId) {
         ObjectResp<SiteDTO> siteDTOObjectResp = adminService.getSite(siteId);
         return siteDTOObjectResp;
     }
 
     @Override
-    @Auth
     public ObjectResp<SiteDTO> createSite(@Valid @RequestBody SiteCreateReq req) {
 
         ObjectResp<SiteDTO> siteDTOObjectResp = adminService.createSite(req);
@@ -49,14 +48,12 @@ public class SiteController implements SiteApi {
     }
 
     @Override
-    @Auth
     public ObjectResp<List<SiteDTO>> listSite() {
         ObjectResp<List<SiteDTO>> listObjectResp = adminService.listSite(1, 9999);
         return listObjectResp;
     }
 
     @Override
-    @Auth
     public ObjectResp<Integer> deleteSite(@Valid @RequestBody SiteDeleteReq req) {
         ObjectResp<Integer> integerObjectResp = adminService.deleteSite(req);
         return integerObjectResp;

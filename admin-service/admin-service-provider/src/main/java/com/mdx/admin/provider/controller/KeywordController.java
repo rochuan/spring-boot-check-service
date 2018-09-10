@@ -27,6 +27,7 @@ import javax.validation.Valid;
  * @email rochuan@163.com
  * @Date 2018-08-13
  */
+@Auth
 public class KeywordController implements KeywordApi {
 
     @Autowired
@@ -34,14 +35,12 @@ public class KeywordController implements KeywordApi {
 
 
     @Override
-    @Auth
     public ObjectResp<KeywordDTO> getKeyword(Integer keywordId) {
         ObjectResp<KeywordDTO> keywordDTOObjectResp = adminService.getKeyword(keywordId);
         return keywordDTOObjectResp;
     }
 
     @Override
-    @Auth
     public ObjectResp<KeywordDTO> createKeyword(@Valid @RequestBody KeywordCreateReq req) {
 
         ObjectResp<KeywordDTO> keywordDTOObjectResp = adminService.createKeyword(req);
@@ -49,14 +48,12 @@ public class KeywordController implements KeywordApi {
     }
 
     @Override
-    @Auth
     public ObjectResp<PageInfo<KeywordDTO>> listKeyword(int pageNumber, int pageSize) {
         ObjectResp<PageInfo<KeywordDTO>> listObjectResp = adminService.listKeyword(pageNumber, pageSize);
         return listObjectResp;
     }
 
     @Override
-    @Auth
     public ObjectResp<Integer> deleteKeyword(@Valid @RequestBody KeywordDeleteReq req) {
         ObjectResp<Integer> keywordDTOObjectResp = adminService.deleteKeyword(req);
         return keywordDTOObjectResp;
