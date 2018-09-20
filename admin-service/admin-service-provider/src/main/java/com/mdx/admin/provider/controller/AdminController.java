@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.mdx.admin.api.pojo.dto.AccessTokenDTO;
 import com.mdx.admin.api.req.AdminCreateReq;
 import com.mdx.admin.provider.authorization.annotation.Auth;
+import com.mdx.admin.provider.config.UserSession;
 import com.mdx.admin.provider.service.IAdminService;
 import com.mdx.admin.api.AdminApi;
 import com.mdx.admin.api.error.ErrorCode;
@@ -36,6 +37,9 @@ public class AdminController implements AdminApi {
     @Autowired
     private IAdminService adminService;
 
+    @Autowired
+    private UserSession userSession;
+
     @Override
     public ObjectResp<AccessTokenDTO> userLogin(@Valid @RequestBody AdminLoginReq req) {
 
@@ -47,10 +51,7 @@ public class AdminController implements AdminApi {
     @Auth
     public ObjectResp<AdminDTO> getAdmin() {
 
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-
-        Long userId = (Long) request.getAttribute("adminId");
+        Long userId = userSession.getUserId();
 
         if (null == userId || 0 == userId) {
             return new ObjectResp<>(ErrorCode.EMPTY_USER_ID);
@@ -63,9 +64,7 @@ public class AdminController implements AdminApi {
     @Override
     @Auth
     public ObjectResp<AccessTokenDTO> logout() {
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-        Long userId = (Long) request.getAttribute("adminId");
+        Long userId = userSession.getUserId();
         if (null == userId || 0 == userId) {
             return new ObjectResp(ErrorCode.EMPTY_USER_ID);
         }

@@ -31,48 +31,56 @@ public class ConfigController implements ConfigApi {
     private IAdminService adminService;
 
     @Override
+    @Auth
     public ObjectResp<SmsConfigDTO> getSmsConfig() {
         ObjectResp<SmsConfigDTO> objectResp = adminService.getSmsConfig();
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<EmailConfigDTO> getEmailConfig() {
         ObjectResp<EmailConfigDTO> objectResp = adminService.getEmailConfig();
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> saveSmsConfig(@Valid @RequestBody SaveSmsConfigReq req) {
         ObjectResp<Integer> objectResp = adminService.saveSmsConfig(req);
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> saveEmailConfig(@Valid @RequestBody SaveEmailConfigReq req) {
         ObjectResp<Integer> objectResp = adminService.saveEmailConfig(req);
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<RiskNoticeConfigDTO> getRiskNotice() {
         ObjectResp<RiskNoticeConfigDTO> objectResp = adminService.getRiskNotice();
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> saveRiskNotice(@Valid @RequestBody  SaveRiskNoticeConfigReq req) {
         ObjectResp<Integer> objectResp = adminService.saveRiskNotice(req);
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<MonitorReportNoticeConfigDTO> getMonitorReportNotice() {
         ObjectResp<MonitorReportNoticeConfigDTO> objectResp = adminService.getMonitorReportNotice();
         return objectResp;
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> saveMonitorReportNotice(@Valid @RequestBody SaveMonitorReportNoticeConfigReq req) {
         ObjectResp<Integer> objectResp = adminService.saveMonitorReportNotice(req);
         return objectResp;

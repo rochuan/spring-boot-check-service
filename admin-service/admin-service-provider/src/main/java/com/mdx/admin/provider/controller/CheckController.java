@@ -35,12 +35,13 @@ public class CheckController implements CheckApi {
 
 
     @Override
-
+    @Auth
     public ObjectResp<DashboardDTO> getDashboard(int siteId , int pageNumber, int pageSize) {
         return adminService.getDashboard(siteId , pageNumber , pageSize);
     }
 
     @Override
+    @Auth
     public ObjectResp<CustomCheckDTO> createCustom(@Valid @RequestBody CustomCheckCreateReq req) {
         ObjectResp<CustomCheckDTO> customCheckDTOObjectResp = adminService.createCustomCheck(req);
 
@@ -48,21 +49,25 @@ public class CheckController implements CheckApi {
     }
 
     @Override
+    @Auth
     public ObjectResp<PageInfo<SiteCheckTaskLogDTO>> listRiskLog(int siteId, int pageNumber, int pageSize) {
         return adminService.listRiskLog(siteId, pageNumber, pageSize);
     }
 
     @Override
+    @Auth
     public ObjectResp<CheckReportDTO> getReport(int siteId, String reportId, int reportType) {
         return adminService.getReport(siteId , reportId , reportType );
     }
 
     @Override
+    @Auth
     public ObjectResp<PageInfo<SiteCheckTaskLogDTO>> getRiskReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize) {
         return adminService.getRiskReportList(siteId , reportId , reportType , pageNumber , pageSize);
     }
 
     @Override
+    @Auth
     public ObjectResp<PageInfo<SiteCheckTaskLogDTO>> getCheckReportList(int siteId, String reportId, int reportType, int pageNumber, int pageSize) {
         return adminService.getCheckReportList(siteId , reportId , reportType , pageNumber , pageSize);
     }
@@ -74,11 +79,13 @@ public class CheckController implements CheckApi {
     }
 
     @Override
+    @Auth
     public ObjectResp<CountCheckDTO> getCheckCount(int siteId) {
         return adminService.getCheckCount(siteId);
     }
 
     @Override
+    @Auth
     public ObjectResp<Integer> deleteSiteCheckTaskLogUrl(@Valid @RequestBody ChecktaskLogDeleteReq req) {
         return null;
     }
