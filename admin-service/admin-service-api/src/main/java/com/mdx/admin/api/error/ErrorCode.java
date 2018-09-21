@@ -12,6 +12,7 @@ public enum ErrorCode implements IErrorCode {
     EMPTY_USER(1000, "用户信息不存在！请检查账号是否正确！"),
     EMPTY_USER_ID(1001, "用户ID为空！"),
     PASSWORD_ERROR(1002, "用户名或者密码错误！"),
+    CAPTCHA_ERROR(1005, "验证码不能为空！"),
     DATA_INFO_EXIST(1004, "数据库已存在该数据，请勿重复插入！"),
     DATA_INFO_NOT_EXIST(1005, "数据库不已存在该数据，请检查！"),
     DATA_INFO_DELETE_ERROR(1006, "删除失败，请检查！"),

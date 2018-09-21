@@ -16,6 +16,9 @@ public class AdminLoginReq {
     @NotNull
     private String password;
 
+    @ApiModelProperty("验证码")
+    private String captchaCode;
+
 
     public String getAccount() {
         return account;
@@ -31,5 +34,13 @@ public class AdminLoginReq {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getCaptchaCode() {
+        return captchaCode;
+    }
+
+    public void setCaptchaCode(String captchaCode) {
+        this.captchaCode = captchaCode;
     }
 }

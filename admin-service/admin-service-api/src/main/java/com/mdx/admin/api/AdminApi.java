@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @ApiIgnore
@@ -36,6 +39,9 @@ public interface AdminApi {
     })
     public ObjectResp<AdminDTO> getAdmin();
 
+    @ApiOperation(value = "获取图片验证码(10002)")
+    @RequestMapping(method = RequestMethod.GET, value = "/getCaptcha")
+    public void getCaptcha() ;
 
     @ApiOperation(value = "管理员用户退出(10003)")
     @RequestMapping(method = RequestMethod.POST, value = "/logout")
