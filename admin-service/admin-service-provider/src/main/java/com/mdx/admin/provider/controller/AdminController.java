@@ -2,7 +2,9 @@ package com.mdx.admin.provider.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.mdx.admin.api.pojo.dto.AccessTokenDTO;
+import com.mdx.admin.api.pojo.dto.CaptchaDTO;
 import com.mdx.admin.api.req.AdminCreateReq;
+import com.mdx.admin.api.utils.CaptchaUtil;
 import com.mdx.admin.provider.authorization.annotation.Auth;
 import com.mdx.admin.provider.config.UserSession;
 import com.mdx.admin.provider.service.IAdminService;
@@ -18,8 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Base64;
 
 @Api(tags = "管理员后台登录接口")
 @RestController
@@ -42,7 +51,6 @@ public class AdminController implements AdminApi {
 
     @Override
     public ObjectResp<AccessTokenDTO> userLogin(@Valid @RequestBody AdminLoginReq req) {
-
         ObjectResp<AccessTokenDTO> adminDTOObjectResp = adminService.login(req);
         return adminDTOObjectResp;
     }
@@ -59,6 +67,32 @@ public class AdminController implements AdminApi {
         ObjectResp<AdminDTO> adminDTOObjectResp = adminService.getAdmin(userId);
 
         return adminDTOObjectResp;
+    }
+
+    @Override
+    public void getCaptcha() {
+        //利用图片工具生成图片
+
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+        HttpServletResponse response = servletRequestAttributes.getResponse();
+
+        HttpSession session = request.getSession();
+        //利用图片工具生成图片
+        //第一个参数是生成的验证码，第二个参数是生成的图片
+        Object[] objs = CaptchaUtil.createImage();
+        //将验证码存入Session
+        session.setAttribute("imageCode", objs[0]);
+
+        //将图片输出给浏览器
+        BufferedImage image = (BufferedImage) objs[1];
+        response.setContentType("image/png");
+        try {
+            OutputStream os = response.getOutputStream();
+            ImageIO.write(image, "png", os);
+        } catch (IOException ex) {
+            System.out.println("error");
+        }
     }
 
     @Override
