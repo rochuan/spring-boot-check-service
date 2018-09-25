@@ -25,6 +25,7 @@ public interface IAdminService {
 
     ObjectResp<PageInfo<AdminDTO>> listAdmin(int pageNumber, int pageSize);
 
+    ObjectResp<AdminDTO> createAdmin(AdminCreateReq req);
 
     //站点
     ObjectResp<SiteDTO> createSite(SiteCreateReq req);

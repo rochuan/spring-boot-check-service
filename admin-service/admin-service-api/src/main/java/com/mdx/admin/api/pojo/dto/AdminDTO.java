@@ -9,6 +9,9 @@ public class AdminDTO {
 
     @ApiModelProperty("管理员ID")
     private Long adminId;
+
+    @ApiModelProperty("账号")
+    private String account;
     @ApiModelProperty("管理员名字")
     private String adminName;
     @ApiModelProperty("管理员手机号")
@@ -29,6 +32,15 @@ public class AdminDTO {
     private Date gmtLastLogin;
     @ApiModelProperty("状态")
     private Integer status;
+
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
 
     public Long getAdminId() {
         return adminId;

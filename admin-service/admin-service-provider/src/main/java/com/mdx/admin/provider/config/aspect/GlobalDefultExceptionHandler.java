@@ -33,7 +33,7 @@ public class GlobalDefultExceptionHandler {
         if (e instanceof NoHandlerFoundException){
             return new ObjectResp(404, "自定义异常404，api不存在！");
         }
-        return new ObjectResp(500, "系统异常！");
+        return new ObjectResp(500, "系统异常！" + e.getMessage());
 
     }
 }

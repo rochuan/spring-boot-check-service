@@ -12,17 +12,18 @@ public class AdminCreateReq {
     @NotNull
     private String account;
 
+    @ApiModelProperty("名称")
+    @NotNull
+    private String username;
+
     @ApiModelProperty("密码")
     @NotNull
     private String password;
 
     @ApiModelProperty("手机号")
-    @NotNull
     private String mobile;
 
-
     @ApiModelProperty("电子邮件")
-    @NotNull
     private String email;
 
 
@@ -56,5 +57,13 @@ public class AdminCreateReq {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

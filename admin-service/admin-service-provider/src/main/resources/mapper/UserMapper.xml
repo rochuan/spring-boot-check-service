@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.mdx.admin.provider.dao.AdminDAO">
     <resultMap id="BaseResultMap" type="com.mdx.admin.api.pojo.dto.AdminDTO">
-        <result column="admin_id" property="adminId" />
-        <result column="admin_name" property="adminName" />
-        <result column="mobile" property="mobile" />
-        <result column="password" property="password" />
-        <result column="email" property="email" />
-        <result column="salt" property="salt" />
-        <result column="avatar" property="avatar" />
-        <result column="gmt_created" property="gmtCreated" />
-        <result column="gmt_updated" property="gmtUpdated" />
-        <result column="gmt_last_login" property="gmtLastLogin" />
-        <result column="status" property="status" />
+        <result column="admin_id" property="adminId"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="mobile" property="mobile"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="salt" property="salt"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_updated" property="gmtUpdated"/>
+        <result column="gmt_last_login" property="gmtLastLogin"/>
+        <result column="status" property="status"/>
     </resultMap>
 
 
@@ -22,23 +22,36 @@
 
     <select id="getAdmin" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from t_d_admin
         where admin_id = #{adminId}
     </select>
 
     <select id="getAdminByAccount" resultMap="BaseResultMap" parameterType="java.lang.String">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from t_d_admin
         where account = #{account}
     </select>
 
-    <select id="listAdmin" resultMap="BaseResultMap" >
+    <select id="listAdmin" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from t_d_admin
         where status = 10
     </select>
+
+    <insert id="insertAdmin" parameterType="com.mdx.admin.api.pojo.dto.AdminDTO" keyProperty="adminId" useGeneratedKeys="true" >
+    insert into t_d_admin (admin_id, account, email,
+      mobile, admin_name, salt,
+      password, avatar, gmt_created,
+      gmt_updated, status, gmt_last_login
+      )
+    values (#{adminId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+      #{mobile,jdbcType=CHAR}, #{adminName,jdbcType=VARCHAR}, #{salt,jdbcType=CHAR},
+      #{password,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, now(),
+      #{gmtUpdated,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}, #{gmtLastLogin,jdbcType=TIMESTAMP}
+      )
+  </insert>
 
 </mapper>

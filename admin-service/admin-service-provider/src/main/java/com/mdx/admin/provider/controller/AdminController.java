@@ -116,8 +116,8 @@ public class AdminController implements AdminApi {
 
     @Override
     @Auth
-    public ObjectResp<AccessTokenDTO> createAdmin(@Valid AdminCreateReq req) {
-        return null;
+    public ObjectResp<AdminDTO> createAdmin(@Valid @RequestBody AdminCreateReq req) {
+        return adminService.createAdmin(req);
     }
 
 

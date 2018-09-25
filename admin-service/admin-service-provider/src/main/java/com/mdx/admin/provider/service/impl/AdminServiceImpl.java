@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AdminServiceImpl implements IAdminService {
@@ -100,6 +101,28 @@ public class AdminServiceImpl implements IAdminService {
         }
         PageInfo<AdminDTO> pageInfo = new PageInfo<AdminDTO>(adminDTOList);
         return new ObjectResp<PageInfo<AdminDTO>>(pageInfo);
+    }
+
+    @Override
+    public ObjectResp<AdminDTO> createAdmin(AdminCreateReq req) {
+        AdminDTO adminDTO = adminDAO.getAdminByAccount(req.getAccount());
+        if (null != adminDTO) {
+            return new ObjectResp<>(ErrorCode.DATA_INFO_EXIST);
+        }
+        EncryptUtil encrypt = new EncryptUtil();
+
+        adminDTO = new AdminDTO();
+        adminDTO.setAdminName(req.getUsername());
+        adminDTO.setAccount(req.getAccount());
+        adminDTO.setEmail(req.getEmail());
+        adminDTO.setSalt(UUID.randomUUID().toString());
+
+        String password = encrypt.SHA512(encrypt.MD5(req.getPassword()) + adminDTO.getSalt());
+        adminDTO.setPassword(password);
+
+        int last_insert_id = adminDAO.insertAdmin(adminDTO);
+        return new ObjectResp<AdminDTO>(adminDTO);
+
     }
 
     @Override
@@ -529,6 +552,7 @@ public class AdminServiceImpl implements IAdminService {
             System.out.println(reportId + "Success to call shell's command ");
         }
     }
+
     private TaskRecordDTO getHomepageCheck(int siteId) {
         Integer reportType = 0;
         TaskRecordDTO taskRecordDTO = taskRecordDAO.selectBySiteId(siteId, reportType);

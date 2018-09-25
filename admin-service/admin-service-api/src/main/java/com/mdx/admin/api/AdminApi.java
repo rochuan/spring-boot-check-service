@@ -63,5 +63,8 @@ public interface AdminApi {
 
     @ApiOperation(value = "管理员添加(10005)")
     @RequestMapping(method = RequestMethod.POST, value = "/create")
-    public ObjectResp<AccessTokenDTO> createAdmin(@Valid @RequestBody AdminCreateReq req);
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, dataType = "string", paramType = "header"),
+    })
+    public ObjectResp<AdminDTO> createAdmin(@Valid @RequestBody AdminCreateReq req);
 }

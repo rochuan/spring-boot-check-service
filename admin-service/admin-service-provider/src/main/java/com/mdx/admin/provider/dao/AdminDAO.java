@@ -43,4 +43,6 @@ public interface AdminDAO {
      * @return
      */
     List<AdminDTO> listAdmin(@Param("pageNumber") Integer pageNumber , @Param("pageSize") Integer pageSize);
+
+    int insertAdmin(AdminDTO adminDTO);
 }
