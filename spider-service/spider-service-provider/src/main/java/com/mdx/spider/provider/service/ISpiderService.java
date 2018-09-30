@@ -2,6 +2,7 @@ package com.mdx.spider.provider.service;
 
 import com.github.pagehelper.PageInfo;
 import com.mdx.common.ObjectResp;
+import com.mdx.spider.api.pojo.domain.SiteDO;
 import com.mdx.spider.api.pojo.domain.SiteUrlDO;
 import com.mdx.spider.api.req.SpiderSiteCreateReq;
 
@@ -18,6 +19,11 @@ import java.util.List;
 public interface ISpiderService {
 
     ObjectResp<SiteUrlDO> getSiteSpider(SpiderSiteCreateReq req);
+
     SiteUrlDO insertSpiderSiteUrl(Integer siteId, String url);
+
+    SiteDO getSiteBySpiderStatus(Integer spiderStatus);
+
+    int updateSiteBySpiderStatus(SiteDO siteDO);
 
 }

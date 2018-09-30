@@ -1,6 +1,7 @@
 package com.mdx.spider.provider.excutor;
 
 import com.mdx.common.TimeUtil;
+import com.mdx.spider.api.pojo.domain.SiteDO;
 import com.mdx.spider.api.pojo.domain.SiteUrlDO;
 import com.mdx.spider.api.pojo.dto.SpiderSiteUrResponselDTO;
 import com.mdx.spider.provider.dao.SiteUrlDAO;
@@ -63,6 +64,7 @@ public class SpiderPageExcutor implements PageProcessor {
 
         SiteUrlDO siteUrlDO = iSpiderService.insertSpiderSiteUrl(siteId, page.getUrl().toString());
         page.putField("siteUrlDO", siteUrlDO);
+        logger.info("\n siteUrlDO logger " + siteUrlDO);
         page.addTargetRequests(page.getHtml().links().regex("(" + stringBuilder.toString() + ")").all());
     }
 
@@ -76,26 +78,48 @@ public class SpiderPageExcutor implements PageProcessor {
     }
 
     public SpiderSiteUrResponselDTO run(SpiderPageExcutor spiderPageExcutor, Integer siteId, String siteUrl) {
-        SpiderSiteUrResponselDTO spiderSiteUrResponselDTO = new SpiderSiteUrResponselDTO();
-        spiderSiteUrResponselDTO.setGmtCreated(new Date());
-        long start = System.currentTimeMillis();
         if (null == siteId || 0 == siteId) {
-            return spiderSiteUrResponselDTO;
+            return null;
         }
         if (null == siteUrl) {
-            return spiderSiteUrResponselDTO;
+            return null;
         }
         this.setSiteId(siteId);
         this.setSiteUrl(siteUrl);
 
+
+        //修改爬虫为爬虫中
+        SiteDO siteDO = new SiteDO();
+        siteDO.setSiteId(siteId);
+        int spiderStatus = 1;
+        siteDO.setSpiderStatus(spiderStatus);
+        long start = System.currentTimeMillis();
+        Date spiderGmtCreated = new Date(start);
+        siteDO.setSpiderGmtCreated(spiderGmtCreated);
+        iSpiderService.updateSiteBySpiderStatus(siteDO);
+
         Spider.create(spiderPageExcutor).addUrl(siteUrl).thread(5).run();
         long end = System.currentTimeMillis();
+        Date spiderGmtUpdated = new Date(end);
+
         String cost = TimeUtil.parseMillisecone(end - start);
         System.out.println("爬虫结束,耗时--->" + cost);
+
+        //修改爬虫为爬虫完成
+        spiderStatus = 2;
+        siteDO.setSpiderStatus(spiderStatus);
+        siteDO.setGmtUpdated(spiderGmtUpdated);
+        siteDO.setCostValue(cost);
+        siteDO.setSpriderGmtUpdated(spiderGmtUpdated);
+        iSpiderService.updateSiteBySpiderStatus(siteDO);
+
+        SpiderSiteUrResponselDTO spiderSiteUrResponselDTO = new SpiderSiteUrResponselDTO();
+        spiderSiteUrResponselDTO.setGmtCreated(spiderGmtCreated);
         spiderSiteUrResponselDTO.setSiteId(siteId);
         spiderSiteUrResponselDTO.setSiteUrl(siteUrl);
-        spiderSiteUrResponselDTO.setGmtUpdated(new Date());
         spiderSiteUrResponselDTO.setCost(cost);
+        spiderSiteUrResponselDTO.setGmtUpdated(spiderGmtUpdated);
+
         return spiderSiteUrResponselDTO;
     }
 }

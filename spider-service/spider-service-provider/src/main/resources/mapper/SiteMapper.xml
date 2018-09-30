@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mdx.spider.provider.dao.SiteDAO">
+    <resultMap id="BaseResultMap" type="com.mdx.spider.api.pojo.domain.SiteDO">
+        <id column="site_id" property="siteId" jdbcType="INTEGER"/>
+        <result column="site_name" property="siteName" jdbcType="VARCHAR"/>
+        <result column="site_url" property="siteUrl" jdbcType="VARCHAR"/>
+        <result column="site_code" property="siteCode" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_updated" property="gmtUpdated" jdbcType="TIMESTAMP"/>
+        <result column="spider_status" property="spiderStatus" jdbcType="TINYINT"/>
+        <result column="spider_gmt_created" property="spiderGmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="sprider_gmt_updated" property="spriderGmtUpdated" jdbcType="TIMESTAMP"/>
+        <result column="cost_value" property="costValue" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    site_id, site_name, site_url, site_code, status, gmt_created, gmt_updated, spider_status,
+    spider_gmt_created, sprider_gmt_updated, cost_value
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site
+        where site_id = #{siteId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectSiteBySpiderStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_d_site
+        where spider_status = #{spiderStatus,jdbcType=INTEGER} order by site_id asc limit 1
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.mdx.spider.api.pojo.domain.SiteDO">
+        update t_d_site
+        <set>
+            <if test="siteName != null">
+                site_name = #{siteName,jdbcType=VARCHAR},
+            </if>
+            <if test="siteUrl != null">
+                site_url = #{siteUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="siteCode != null">
+                site_code = #{siteCode,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="gmtCreated != null">
+                gmt_created = #{gmtCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtUpdated != null">
+                gmt_updated = #{gmtUpdated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="spiderStatus != null">
+                spider_status = #{spiderStatus,jdbcType=TINYINT},
+            </if>
+            <if test="spiderGmtCreated != null">
+                spider_gmt_created = #{spiderGmtCreated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="spriderGmtUpdated != null">
+                sprider_gmt_updated = #{spriderGmtUpdated,jdbcType=TIMESTAMP},
+            </if>
+            <if test="costValue != null">
+                cost_value = #{costValue,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where site_id = #{siteId,jdbcType=INTEGER}
+    </update>
+</mapper>

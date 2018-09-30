@@ -3,8 +3,10 @@ package com.mdx.spider.provider.service.impl;
 
 import com.mdx.common.ObjectResp;
 import com.mdx.spider.api.error.ErrorCode;
+import com.mdx.spider.api.pojo.domain.SiteDO;
 import com.mdx.spider.api.pojo.domain.SiteUrlDO;
 import com.mdx.spider.api.req.SpiderSiteCreateReq;
+import com.mdx.spider.provider.dao.SiteDAO;
 import com.mdx.spider.provider.dao.SiteUrlDAO;
 import com.mdx.spider.provider.excutor.SpiderPageExcutor;
 import com.mdx.spider.provider.service.ISpiderService;
@@ -28,6 +30,9 @@ public class SpiderServiceImpl implements ISpiderService {
     @Autowired
     private SiteUrlDAO siteUrlDAO;
 
+    @Autowired
+    private SiteDAO siteDAO;
+
     @Override
     public ObjectResp<SiteUrlDO> getSiteSpider(SpiderSiteCreateReq req) {
         return new ObjectResp<>();
@@ -47,5 +52,19 @@ public class SpiderServiceImpl implements ISpiderService {
             return null;
         }
         return siteUrlDO;
+    }
+
+    @Override
+    public SiteDO getSiteBySpiderStatus(Integer spiderStatus) {
+        SiteDO siteDO = siteDAO.selectSiteBySpiderStatus(spiderStatus);
+        if (null == siteDO) {
+            return new SiteDO();
+        }
+        return siteDO;
+    }
+
+    @Override
+    public int updateSiteBySpiderStatus(SiteDO siteDO) {
+        return siteDAO.updateByPrimaryKeySelective(siteDO);
     }
 }
