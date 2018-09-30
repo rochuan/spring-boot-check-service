@@ -50,7 +50,7 @@
     values (#{adminId,jdbcType=INTEGER}, #{account,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
       #{mobile,jdbcType=CHAR}, #{adminName,jdbcType=VARCHAR}, #{salt,jdbcType=CHAR},
       #{password,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, now(),
-      #{gmtUpdated,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT}, #{gmtLastLogin,jdbcType=TIMESTAMP}
+      #{gmtUpdated,jdbcType=TIMESTAMP}, 10, #{gmtLastLogin,jdbcType=TIMESTAMP}
       )
   </insert>
 

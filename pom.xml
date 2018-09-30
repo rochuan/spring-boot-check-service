@@ -9,6 +9,7 @@
     <modules>
         <module>admin-service</module>
         <module>msa-public-common</module>
+        <module>spider-service</module>
     </modules>
     <packaging>pom</packaging>
 

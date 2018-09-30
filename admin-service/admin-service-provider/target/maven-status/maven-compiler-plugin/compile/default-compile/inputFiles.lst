@@ -19,6 +19,7 @@
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/config/MyRedisConfiguration.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/config/EnableMybatis.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/controller/CheckController.java
+/code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/config/UserSession.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/AdminServiceApplication.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/config/MvcConfig.java
 /code/javaProject/myProject/mdx-msa/admin-service/admin-service-provider/src/main/java/com/mdx/admin/provider/config/Swagger2Config.java

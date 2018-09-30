@@ -89,6 +89,7 @@ public class AdminServiceImpl implements IAdminService {
         String accessToken = jedis.get(key);
         jedis.del(accessToken);
         jedis.del(key);
+        jedis.close();
         return new ObjectResp<>(ErrorCode.SUCCESS);
     }
 

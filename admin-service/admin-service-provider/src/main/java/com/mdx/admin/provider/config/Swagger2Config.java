@@ -45,7 +45,7 @@ public class Swagger2Config extends WebMvcConfigurerAdapter{
     public Docket testApi() {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-                .groupName("test")
+                .groupName("admin-service")
                 .genericModelSubstitutes(DeferredResult.class)
 //                .genericModelSubstitutes(ResponseEntity.class)
                 .useDefaultResponseMessages(false)

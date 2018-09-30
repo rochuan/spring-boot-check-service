@@ -1,5 +1,6 @@
 com/mdx/admin/provider/AdminServiceApplication.class
 com/mdx/admin/provider/config/MyRedisConfiguration.class
+com/mdx/admin/provider/config/UserSession.class
 com/mdx/admin/provider/config/MyCorsConfiguration.class
 com/mdx/admin/provider/dao/ConfigDAO.class
 com/mdx/admin/provider/dao/SiteDAO.class
